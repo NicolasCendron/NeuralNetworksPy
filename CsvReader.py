@@ -5,7 +5,10 @@ from collections import OrderedDict
 def read_csv(arquivo):
     with open(arquivo) as dataFile:
         validation_data = []
-        csvReader = csv.reader(dataFile, delimiter='\t')
+        if arquivo == "pima.tsv":
+            csvReader = csv.reader(dataFile, delimiter='\t')
+        else:
+            csvReader = csv.reader(dataFile, delimiter=',')
         cont = 0
         attribute_matrix = []
         for row in csvReader:
@@ -28,16 +31,15 @@ def read_csv(arquivo):
 
         target_attribute_index = len(attribute_matrix) - 1
 
-        if arquivo == "dataset_31_credit-g.csv":
-            attribute_matrix[-1][1] = ["good", "bad"]
-        elif arquivo == "dataset_191_wine-1.csv":
+        if arquivo == "ionosphere.data":
+            attribute_matrix[-1][1] = ["g", "b"]
+        elif arquivo == "wine.data":
             attribute_matrix[0][1] = ["1", "2", "3"]
             target_attribute_index = 0
-        elif arquivo == "vertebra.csv":
-            attribute_matrix[-1][1] = ["1", "2", "3"]
         else:
-            attribute_matrix[-1][1] = ["Sim", "Nao"]
+            attribute_matrix[-1][1] = ["1", "0"]
 
+        '''
         for attribute in attribute_matrix:
             if attribute_matrix.index(attribute) != target_attribute_index:
                 try:
@@ -52,5 +54,5 @@ def read_csv(arquivo):
                     attribute[1] = ["@< " + str(round(average,3)), "@> " + str(round(average,3))]
                 except ValueError:
                     continue
-
+        '''
         return validation_data, attribute_matrix
