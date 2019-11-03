@@ -2,7 +2,7 @@ import csv
 from collections import OrderedDict
 
 
-def read_csv(arquivo):
+def read_dataset(arquivo):
     with open(arquivo) as dataFile:
         validation_data = []
         if arquivo == "pima.tsv":
@@ -56,3 +56,14 @@ def read_csv(arquivo):
                     continue
         '''
         return validation_data, attribute_matrix
+
+def read_networks(arquivo):
+    with open(arquivo) as f:
+        lamb = float(f.readline())
+        layers = []
+        for line in f:
+            layers.append(int(line))
+
+    return lamb, layers
+
+#def read_initial_weights(arquivo):
