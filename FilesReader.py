@@ -66,4 +66,29 @@ def read_networks(arquivo):
 
     return lamb, layers
 
+def read_dataset_novo(arquivo):
+    with open(arquivo) as dataFile:
+        inputs = []
+        outputs = []
+        if arquivo == "pima.tsv":
+            csvReader = csv.reader(dataFile, delimiter='\t')
+        else:
+            csvReader = csv.reader(dataFile, delimiter=',')
+        cont = 0
+
+        for row in csvReader:
+
+            if cont == 0:
+                cont+=1
+                continue
+
+            if arquivo == "wine.data":
+                outputs.append(row[0])
+                inputs.append(row[1:])
+            else:
+                inputs.append(row[:-1])
+                outputs.append(row[-1])
+
+        return inputs, outputs
+
 #def read_initial_weights(arquivo):
