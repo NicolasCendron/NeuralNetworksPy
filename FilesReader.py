@@ -1,6 +1,6 @@
 import csv
 from collections import OrderedDict
-
+import numpy as np
 
 def read_dataset(arquivo):
     with open(arquivo) as dataFile:
@@ -66,6 +66,24 @@ def read_networks(arquivo):
 
     return lamb, layers
 
+def read_thetas(arquivo):
+    with open(arquivo) as f:
+
+        matrix_list = []
+        for line in f:
+            line = line.strip()
+            theta = line.split(";")
+            theta_matrix = []
+            for row in theta:
+                values = row.split(",")
+                matrix = []
+                for value in values:
+                    matrix.append(float(value))
+                theta_matrix.append(matrix)
+            matrix_list.append(np.array(theta_matrix))
+
+        return matrix_list
+
 def read_dataset_novo(arquivo):
     with open(arquivo) as dataFile:
         inputs = []
@@ -90,5 +108,3 @@ def read_dataset_novo(arquivo):
                 outputs.append(row[-1])
 
         return inputs, outputs
-
-#def read_initial_weights(arquivo):
