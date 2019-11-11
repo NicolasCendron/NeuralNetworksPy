@@ -84,7 +84,7 @@ def read_thetas(arquivo):
 
         return matrix_list
 
-def read_dataset_novo(arquivo):
+def read_dataset_vectorization(arquivo):
     with open(arquivo) as dataFile:
         inputs = []
         outputs = []

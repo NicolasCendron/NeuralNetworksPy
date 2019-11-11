@@ -101,11 +101,38 @@ def exemplo_back_um(layers,theta_matrices):
     print(exemplos)
     Jexemplo = calculaJ(exemplos,thetas,regularizacao,network)
 
+def exemplo_back_two(layers,theta_matrices):
+    # 4 camadas [2 4 3 2]
+
+    network = np.array(layers)
+
+    theta1 = theta_matrices[0]
+    theta2 = theta_matrices[1]
+    theta3 = theta_matrices[2]
+
+    thetas = np.array([theta1,theta2,theta3])
+
+    regularizacao = 0
+
+    entradas = [[0.32, 0.68], [0.83, 0.02]]
+    saidas = [[0.75, 0.98], [0.75, 0.28]]
+
+    exemplos = []
+    for i in range(0,2):
+        exemplos.append([entradas[i], saidas[i]])
+
+    print(exemplos)
+    Jexemplo = calculaJ(exemplos,thetas,regularizacao,network)
+
 
 if __name__ == '__main__':
     arquivo = "pima.tsv"
     lamb, layers = FilesReader.read_networks("network.txt")
     thetas = FilesReader.read_thetas("initial_weights.txt")
-    #data, attribute_matrix = FilesReader.read_dataset(arquivo)
+    inputs, outputs = FilesReader.read_dataset_vectorization(arquivo)
 
     exemplo_back_um(layers,thetas)
+
+    lamb, layers = FilesReader.read_networks("network2.txt")
+    thetas = FilesReader.read_thetas("initial_weights2.txt")
+    #exemplo_back_two(layers, thetas)
