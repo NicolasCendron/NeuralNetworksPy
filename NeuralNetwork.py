@@ -89,7 +89,7 @@ def propagation(example,thetas,network):
 
     return activation_final
 
-def neural_network(layers,theta_matrices,inputs, outputs):
+def neural_network(layers,lamb, theta_matrices,inputs, outputs):
     network = np.array(layers)
 
     thetas = [theta_matrices[0]]
@@ -104,7 +104,7 @@ def neural_network(layers,theta_matrices,inputs, outputs):
 
     thetas = np.array(thetas)
 
-    regularization = 0
+    regularization = lamb
 
     examples = []
     for i in range(0, len(inputs)):

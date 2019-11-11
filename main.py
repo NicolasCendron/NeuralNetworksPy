@@ -75,7 +75,7 @@ def calculaJ(exemplos,thetas, regularizacao, network):
     print(str(J + S))
     return J + S
 
-def exemplo_back_um(layers,theta_matrices):
+def exemplo_back_um(layers,lamb, theta_matrices):
     # 3 camadas [1 2 1]
 
     network = np.array(layers)
@@ -89,7 +89,7 @@ def exemplo_back_um(layers,theta_matrices):
 
     thetas = np.array([theta1,theta2])
 
-    regularizacao = 0
+    regularizacao = lamb
 
     entradas = [[0.13], [0.42]]
     saidas = [[0.9], [0.23]]
@@ -101,7 +101,7 @@ def exemplo_back_um(layers,theta_matrices):
     print(exemplos)
     Jexemplo = calculaJ(exemplos,thetas,regularizacao,network)
 
-def exemplo_back_two(layers,theta_matrices):
+def exemplo_back_two(layers,lamb,theta_matrices):
     # 4 camadas [2 4 3 2]
 
     network = np.array(layers)
@@ -112,7 +112,7 @@ def exemplo_back_two(layers,theta_matrices):
 
     thetas = np.array([theta1,theta2,theta3])
 
-    regularizacao = 0
+    regularizacao = lamb
 
     entradas = [[0.32, 0.68], [0.83, 0.02]]
     saidas = [[0.75, 0.98], [0.75, 0.28]]
@@ -131,10 +131,10 @@ if __name__ == '__main__':
     thetas = FilesReader.read_thetas("initial_weights.txt")
     inputs, outputs = FilesReader.read_dataset_vectorization(arquivo)
 
-    NeuralNetwork.neural_network(layers,thetas,inputs, outputs)
+    NeuralNetwork.neural_network(layers,lamb,thetas,inputs, outputs)
 
-    #exemplo_back_um(layers,thetas)
+    #exemplo_back_um(layers,lamb,thetas)
 
     lamb, layers = FilesReader.read_networks("network2.txt")
     thetas = FilesReader.read_thetas("initial_weights2.txt")
-    #exemplo_back_two(layers, thetas)
+    #exemplo_back_two(layers, lamb,thetas)
