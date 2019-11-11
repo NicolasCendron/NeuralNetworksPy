@@ -24,7 +24,7 @@ def propagacao(exemplo,thetas,network):
         print("z" + str(i + 1))
         print(Zatual)
         Z.append(Zatual)
-        ativacaoAtual = np.insert(sigmoid_vetor(Z), 0, 1)
+        ativacaoAtual = np.insert(sigmoid_vetor(Zatual), 0, 1)
         ativacao.append(ativacaoAtual)
         print("a" + str(i + 1))
         print(ativacao[-1])
@@ -66,9 +66,10 @@ def calculaJ(exemplos,thetas, regularizacao, network):
 
     J = J/ len(exemplos)
     S = 0
-    for theta_vector in thetas[0]:
-        for theta in theta_vector:
-            S+= math.sqrt(theta)
+    for theta_matrix in thetas:
+        for theta_line in theta_matrix:
+            for i in range(1,len(theta_line)): #Evita thetas de bias
+                S+= math.pow(theta_line[i],2)
     S = regularizacao/(2*len(entradas))*S
 
     print("J para o total do dataset")
@@ -137,4 +138,4 @@ if __name__ == '__main__':
 
     lamb, layers = FilesReader.read_networks("network2.txt")
     thetas = FilesReader.read_thetas("initial_weights2.txt")
-    #exemplo_back_two(layers, lamb,thetas)
+    exemplo_back_two(layers, lamb,thetas)
