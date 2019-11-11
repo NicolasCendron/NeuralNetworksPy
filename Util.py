@@ -1,17 +1,18 @@
 import math
 import numpy as np
-import DecisionTree as dt
 
+'''
 def get_classes(attribute_matrix):
     for atributo in attribute_matrix:
         if atributo[0] == "Class":
             tipos_classificacao = atributo[1]
             break
     return tipos_classificacao
+'''
 
 def log2(x):
     return math.log(x) / math.log(2)
-
+'''
 def get_class_attribute_index(attribute_matrix):
     cont = 0
     for att in attribute_matrix:
@@ -19,9 +20,11 @@ def get_class_attribute_index(attribute_matrix):
             return cont
         cont += 1
 
+
 def get_m(attribute_matrix):
     size = len(attribute_matrix) - 1
     return math.sqrt(size)
+'''
 
 def prec(vp, fp):
     if vp + fp != 0:
@@ -115,7 +118,7 @@ def performance_multiclass(list_tuples, classes):
     performance_dict["macro"] = precision_sum/len(classes)
     performance_dict["micro"] = np.sum(VP) / (np.sum(VP) + np.sum(FP))
     return performance_dict
-
+'''
 def evaluate_tree(decisionTree, test_set, all_classes):
     print("Evaluating Tree")
     list_tuples = []
@@ -202,5 +205,5 @@ def print_stats(stats, all_classes):
             print("Class", c, "F1 mean =", np.mean(f1s[c]))
             print("Class", c, "F1 std =", np.std(f1s[c]))
         # print(f1s)
-
+'''
                 

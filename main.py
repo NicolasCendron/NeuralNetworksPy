@@ -1,7 +1,7 @@
 import FilesReader
 import numpy as np
 import math
-
+import NeuralNetwork
 
 
 def sigmoid(x):
@@ -131,7 +131,9 @@ if __name__ == '__main__':
     thetas = FilesReader.read_thetas("initial_weights.txt")
     inputs, outputs = FilesReader.read_dataset_vectorization(arquivo)
 
-    exemplo_back_um(layers,thetas)
+    NeuralNetwork.neural_network(layers,thetas,inputs, outputs)
+
+    #exemplo_back_um(layers,thetas)
 
     lamb, layers = FilesReader.read_networks("network2.txt")
     thetas = FilesReader.read_thetas("initial_weights2.txt")

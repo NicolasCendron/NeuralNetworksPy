@@ -1,13 +1,11 @@
-import DecisionTree as dt
-import ValidationData as vd
-import Bootstrap as bs
-import CrossValidation as cs
 import Util as ut
-from collections import OrderedDict
+import NeuralNetwork as nn
 
 def generate_partitions(data, K):
     partitions = []
-    ordered_data = sorted(data.copy(), key=lambda k: k['Class'])
+    ordered_data = data
+    # data sorted by output, for use with data with single output only!
+    ordered_data.sort(key = lambda ordered_data: ordered_data[1])
 
     # generate partitions
     for p in range(K):
@@ -19,8 +17,7 @@ def generate_partitions(data, K):
 
     return partitions
 
-def run(data, attribute_matrix):
-    ntree = 20
+def run(data,thetas, regularization, network):
     fixedSeed = 0
     seed = 7
     K = 10
@@ -28,8 +25,8 @@ def run(data, attribute_matrix):
 
     partitions = generate_partitions(data, K)
 
+
     for i in range(K):
-        forest = []
         print("Running K = " + str(i))
 
         # generate cross validation training (K-1) and evaluation (1) partitions
@@ -39,6 +36,9 @@ def run(data, attribute_matrix):
                 training = training + partitions[p]
         evaluation = partitions[i]
 
+        #generate batches instead of using training directly
+        #j_value = nn.j_function(training, thetas, regularization, network)
+        '''
         # run bootstrap and create each decision tree of forest
         for t in range(ntree):
             training_set = bs.generate_training_set(training, fixedSeed)
@@ -66,3 +66,4 @@ def run(data, attribute_matrix):
 
         stats.append(ut.evaluate_forest(forest, evaluation, all_classes))
     ut.print_stats(stats, all_classes)
+    '''
