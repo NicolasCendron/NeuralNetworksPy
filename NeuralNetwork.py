@@ -47,14 +47,16 @@ def j_function(mini_batch, thetas, regularization, network):
 
     J = J/ len(mini_batch)
     S = 0
-    for theta_vector in thetas[0]:
-        for theta in theta_vector:
-            S+= math.sqrt(theta)
+    for theta_matrix in thetas:
+        for theta_line in theta_matrix:
+            for i in range(1,len(theta_line)): #Evita thetas de bias
+                S+= math.pow(theta_line[i],2)
     S = regularization/(2*len(inputs))*S
 
     print("J para o total do dataset")
     print(str(J + S))
     return J + S
+
 
 def propagation(example,thetas,network):
     input = list(example[0])
@@ -73,7 +75,7 @@ def propagation(example,thetas,network):
         print(z_current)
 
         z.append(z_current)
-        activation_current = np.insert(sigmoid_vetor(z), 0, 1)
+        activation_current = np.insert(sigmoid_vetor(z_current), 0, 1)
         activation.append(activation_current)
 
         print("a" + str(i + 1))
@@ -112,7 +114,7 @@ def neural_network(layers,lamb, theta_matrices,inputs, outputs):
 
     #sort examples
     #get training set from examples - cross validation
-    cv.run(examples,thetas, regularization, network)
-    #j_value = j_function(examples, thetas, regularization, network)
+    #cv.run(examples,thetas, regularization, network)
+    j_value = j_function(examples, thetas, regularization, network)
 
 
