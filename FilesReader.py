@@ -107,4 +107,17 @@ def read_dataset_vectorization(arquivo):
                 inputs.append(row[:-1])
                 outputs.append(row[-1])
 
-        return inputs, outputs
+        if arquivo == "ionosphere.data":
+            #set outputs to g = 0 and b = 1
+            float_outputs = []
+
+            for output in outputs:
+                if output == "g":
+                    float_outputs.append("0")
+                else:
+                    float_outputs.append("1")
+
+            return inputs, float_outputs
+
+        else:
+            return inputs, outputs
