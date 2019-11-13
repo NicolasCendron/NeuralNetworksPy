@@ -113,11 +113,14 @@ def read_dataset_vectorization(arquivo):
 
             for output in outputs:
                 if output == "g":
-                    float_outputs.append("0")
+                    float_outputs.append([0.0])
                 else:
-                    float_outputs.append("1")
+                    float_outputs.append([1.0])
 
-            return inputs, float_outputs
+            input_list = [list(map(float, sublist)) for sublist in inputs]
+            return input_list, float_outputs
 
         else:
-            return inputs, outputs
+            input_list = [list(map(float, sublist)) for sublist in inputs]
+            output_list = [list(map(float, sublist)) for sublist in outputs]
+            return input_list, output_list

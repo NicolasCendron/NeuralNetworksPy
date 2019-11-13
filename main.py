@@ -127,13 +127,24 @@ def exemplo_back_two(layers,lamb,theta_matrices):
 
 
 if __name__ == '__main__':
+
     arquivo = "pima.tsv"
+    lamb, layers = FilesReader.read_networks("pima_network.txt")
+    thetas = FilesReader.read_thetas("pima_initial_weights.txt")
+
+    #arquivo = "wine.data"
+    #lamb, layers = FilesReader.read_networks("wine_network.txt")
+    #thetas = FilesReader.read_thetas("wine_initial_weights.txt")
+
+    #arquivo = "ionosphere.data"
+    #lamb, layers = FilesReader.read_networks("ionosphere_network.txt")
+    #thetas = FilesReader.read_thetas("ionosphere_initial_weights.txt")
+
+    inputs, outputs = FilesReader.read_dataset_vectorization(arquivo)
+    NeuralNetwork.neural_network(layers,lamb,thetas,inputs, outputs)
+
     lamb, layers = FilesReader.read_networks("network.txt")
     thetas = FilesReader.read_thetas("initial_weights.txt")
-    inputs, outputs = FilesReader.read_dataset_vectorization(arquivo)
-
-    #NeuralNetwork.neural_network(layers,lamb,thetas,inputs, outputs)
-
     #exemplo_back_um(layers,lamb,thetas)
     NeuralNetwork.neural_network(layers, lamb, thetas, [[0.13], [0.42]], [[0.9], [0.23]])
 
