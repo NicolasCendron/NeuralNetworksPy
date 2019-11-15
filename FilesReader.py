@@ -118,9 +118,27 @@ def read_dataset_vectorization(arquivo):
                     float_outputs.append([1.0])
 
             input_list = [list(map(float, sublist)) for sublist in inputs]
+            set_normalization(input_list)
             return input_list, float_outputs
 
         else:
             input_list = [list(map(float, sublist)) for sublist in inputs]
+            set_normalization(input_list)
             output_list = [list(map(float, sublist)) for sublist in outputs]
+            if arquivo == "wine.data":
+                set_normalization(output_list)
             return input_list, output_list
+
+def set_normalization(input_list):
+    # normalize all values
+    columns = len(input_list[0])
+    for column in range(0, columns):
+        max_value = max((map(lambda x: x[column], input_list)))
+        min_value = min((map(lambda x: x[column], input_list)))
+        if max_value != min_value:
+            for input_value in input_list:
+                input_value[column] = normalize_value(input_value[column], max_value, min_value)
+
+def normalize_value(value, max_value, min_value):
+    normalized_value = round((value - min_value) / (max_value - min_value),5)
+    return normalized_value
