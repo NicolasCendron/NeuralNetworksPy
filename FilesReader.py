@@ -57,6 +57,29 @@ def read_dataset(arquivo):
         '''
         return validation_data, attribute_matrix
 
+def read_simple_dataset(arquivo):
+    instancias = []
+
+    num_lines = sum(1 for line in open(arquivo))
+
+    with open(arquivo) as f:
+        for i in range(num_lines):
+            instancia_atual = f.readline()
+            entradas = []
+            saidas = []
+            print(instancia_atual)
+            txt_entrada, txt_saida = instancia_atual.split(';')
+
+            for entrada in txt_entrada.split(','):
+                entradas.append(float(entrada))
+            for saida in txt_saida.split(','):
+                saidas.append(float(saida))
+
+            instancias.append([entradas, saidas])
+
+    return instancias
+
+
 def read_networks(arquivo):
     with open(arquivo) as f:
         lamb = float(f.readline())
