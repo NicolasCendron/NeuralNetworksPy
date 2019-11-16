@@ -91,7 +91,7 @@ def backpropagation(exemplos, thetas, regularizacao, network, learning_rate):
     for exemplo in exemplos:
         cont += 1
         print("Calculando gradientes com base no exemplo  " + str(cont))
-        entradas = np.array(exemplo[0])
+        #entradas = np.array(exemplo[0])
         saidas = np.array(exemplo[1])
 
         # 1.1 Propaga x(i) e obtém as saídas f(x(i)) preditas pela rede
@@ -121,45 +121,65 @@ def backpropagation(exemplos, thetas, regularizacao, network, learning_rate):
             deltas[k] = delta[1:]
             print("delta"+str(k+1))
             print(deltas[k])
-        # 1.4 Para cada camada k=L-1…1, atualiza os gradientes dos pesos de cada camada com base no exemplo atua
+        # 1.4 Para cada camada k=L-1…1, atualiza os gradientes dos pesos de cada camada com base no exemplo atual
 
 
         #PROVAVEL ERRO AQUI 1.4
         for k in reversed(range(0, len(network)-1)):
-            factor = deltas[k+1] * np.transpose(ativacao[k])
-            D[k] = factor
+            factor = []
+
+            for a in deltas[k+1]:
+                line = []
+                for b in ativacao[k]:
+                    line.append(a*b)
+
+                factor.append(line)
+
+            factor = np.array(factor)
+            #factor = deltas[k+1] * np.transpose(ativacao[k]) #não funciona por alguma razão
+            print("Gradientes de Theta" + str(k + 1) + " com base no exemplo" + str(cont))
+            print(factor)
+
+            #D[k] = factor
             if len(D[k]) == 0:
                 D[k] = factor
             else:
                D[k] += factor
 #
-        # 2. Calcula gradientes finais (regularizados) para os pesos de cada camada
-        for k in reversed(range(0, len(network)-1)):
-            # 2.1 aplica regularização λ apenas a pesos não bias
+    # 2. Calcula gradientes finais (regularizados) para os pesos de cada camada
+    for k in reversed(range(0, len(network)-1)):
+        # 2.1 aplica regularização λ apenas a pesos não bias
 
-            theta_bias_zerado = np.copy(thetas[k])
-            for line in theta_bias_zerado:
-                line[0] = 0
-            Pk = np.multiply(regularizacao, theta_bias_zerado)
-            # 2.2 combina gradientes com regularização; divide pelo num de exemplos para calcular gradiente médio
+        theta_bias_zerado = np.copy(thetas[k])
+        for line in theta_bias_zerado:
+            line[0] = 0
+        Pk = np.multiply(regularizacao, theta_bias_zerado)
+        # 2.2 combina gradientes com regularização; divide pelo num de exemplos para calcular gradiente médio
 
-            D[k] = (1/len(exemplos)) * (D[k] + Pk)
+        D[k] = (1/len(exemplos)) * (D[k] + Pk)
 
-        #4. atualiza pesos de cada camada com base nos gradientes
+    #4. atualiza pesos de cada camada com base nos gradientes
 
-        #print(vetor_learning_rate)
+    #print(vetor_learning_rate)
+    print("Dataset completo processado. Calculando gradientes regularizados")
+    for k in reversed(range(0, len(network)-1)):
 
-        for k in reversed(range(0, len(network)-1)):
+        vetor_learning_rate = [[learning_rate] * len(D[k][0])] * len(D[k])
+        #print (vetor_learning_rate)
+        #print(np.multiply(vetor_learning_rate, D[k]))
 
-            vetor_learning_rate = [[learning_rate] * len(D[k][0]) ] * len(D[k])
-            #print (vetor_learning_rate)
-            #print(np.multiply(vetor_learning_rate, D[k]))
+        gradiente = np.multiply(learning_rate, D[k])
+        print("Gradientes finais para Theta" + str(k+1) + "(com regularizacao):")
+        print(gradiente)
+        thetas[k] = thetas[k] - gradiente
 
-            gradiente = np.multiply(learning_rate, D[k])
-            print("Gradientes de Theta"+ str(k+1) + " com base no exemplo" + str(cont))
-            print(gradiente)
-            thetas[k] = thetas[k] - gradiente
-
+    #thetas finais errados?
+    '''
+    cont = 1
+    for theta in thetas:
+        print("Gradientes finais para Theta" + str(cont) + "(com regularizacao):")
+        print(theta)
+        cont += 1'''
 
 def exemplo_back_um(layers,lamb, theta_matrices):
     # 3 camadas [1 2 1]
@@ -233,10 +253,10 @@ if __name__ == '__main__':
 
     lamb, layers = FilesReader.read_networks("network.txt")
     thetas = FilesReader.read_thetas("initial_weights.txt")
-    #exemplo_back_um(layers,lamb,thetas)
+    exemplo_back_um(layers,lamb,thetas)
     #NeuralNetwork.neural_network(layers, lamb, thetas, [[0.13], [0.42]], [[0.9], [0.23]])
 
     lamb, layers = FilesReader.read_networks("network2.txt")
     thetas = FilesReader.read_thetas("initial_weights2.txt")
-    exemplo_back_two(layers, lamb,thetas)
+    #exemplo_back_two(layers, lamb,thetas)
     #NeuralNetwork.neural_network(layers, lamb, thetas, [[0.32, 0.68], [0.83, 0.02]], [[0.75, 0.98], [0.75, 0.28]])
