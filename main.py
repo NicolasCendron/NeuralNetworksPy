@@ -162,24 +162,19 @@ def backpropagation(exemplos, thetas, regularizacao, network, learning_rate):
 
     #print(vetor_learning_rate)
     print("Dataset completo processado. Calculando gradientes regularizados")
-    for k in reversed(range(0, len(network)-1)):
+    for k in range(0, len(network)-1):
 
-        vetor_learning_rate = [[learning_rate] * len(D[k][0])] * len(D[k])
+        #vetor_learning_rate = [[learning_rate] * len(D[k][0])] * len(D[k])
         #print (vetor_learning_rate)
         #print(np.multiply(vetor_learning_rate, D[k]))
 
         gradiente = np.multiply(learning_rate, D[k])
-        print("Gradientes finais para Theta" + str(k+1) + "(com regularizacao):")
+        print("Gradientes finais para Theta" + str(k+1) + " (com regularizacao):")
         print(gradiente)
+        # thetas finais errados?
         thetas[k] = thetas[k] - gradiente
 
-    #thetas finais errados?
-    '''
-    cont = 1
-    for theta in thetas:
-        print("Gradientes finais para Theta" + str(cont) + "(com regularizacao):")
-        print(theta)
-        cont += 1'''
+
 
 def exemplo_back_um(layers,lamb, theta_matrices):
     # 3 camadas [1 2 1]
@@ -196,7 +191,7 @@ def exemplo_back_um(layers,lamb, theta_matrices):
     thetas = np.array([theta1,theta2])
 
     regularizacao = lamb
-    learning_rate = 0.01
+    learning_rate = 1
 
     entradas = [[0.13], [0.42]]
     saidas = [[0.9], [0.23]]
@@ -221,7 +216,7 @@ def exemplo_back_two(layers,lamb,theta_matrices):
     thetas = np.array([theta1,theta2,theta3])
 
     regularizacao = lamb
-    learning_rate = 0.01
+    learning_rate = 1
 
     entradas = [[0.32, 0.68], [0.83, 0.02]]
     saidas = [[0.75, 0.98], [0.75, 0.28]]
@@ -258,5 +253,5 @@ if __name__ == '__main__':
 
     lamb, layers = FilesReader.read_networks("network2.txt")
     thetas = FilesReader.read_thetas("initial_weights2.txt")
-    #exemplo_back_two(layers, lamb,thetas)
+    exemplo_back_two(layers, lamb,thetas)
     #NeuralNetwork.neural_network(layers, lamb, thetas, [[0.32, 0.68], [0.83, 0.02]], [[0.75, 0.98], [0.75, 0.28]])
