@@ -32,8 +32,8 @@ def exemplo_back_um(layers,lamb, theta_matrices):
     for i in range(0,2):
         exemplos.append([entradas[i], saidas[i]])
 
-    novos_thetas_back, gradientes_back = bp.backpropagation(exemplos, thetas, regularizacao, network, learning_rate)
-    novos_thetas_numer, gradientes_numer = numerical_verification(0.00000010000, thetas, exemplos, regularizacao, network,learning_rate)
+    novos_thetas_back, gradientes_back = bp.backpropagation(exemplos, thetas, regularizacao, network, learning_rate, debug=1)
+    novos_thetas_numer, gradientes_numer = vn.numerical_verification(0.00000010000, thetas, exemplos, regularizacao, network,learning_rate, debug=1)
 
     vn.diff_gradients(gradientes_back, gradientes_numer)
 
@@ -58,18 +58,21 @@ def exemplo_back_two(layers,lamb,theta_matrices):
     for i in range(0,2):
         exemplos.append([entradas[i], saidas[i]])
 
-    novos_thetas_back, gradientes_back = bp.backpropagation(exemplos, thetas, regularizacao, network, learning_rate)
+    novos_thetas_back, gradientes_back = bp.backpropagation(exemplos, thetas, regularizacao, network, learning_rate, debug=1)
     novos_thetas_numer, gradientes_numer = vn.numerical_verification(0.00000010000, thetas, exemplos, regularizacao, network,
-                                                                  learning_rate)
+                                                                  learning_rate, debug=1)
     vn.diff_gradients(gradientes_back, gradientes_numer)
 
 if __name__ == '__main__':
 
+    print("*********** Exemplo Backpropagation 1 *********** ")
 
-    #lamb, layers = FilesReader.read_networks("network.txt")
-    #thetas = FilesReader.read_thetas("initial_weights.txt")
-    #exemplo_back_um(layers,lamb,thetas)
+    lamb, layers = FilesReader.read_networks("network.txt")
+    thetas = FilesReader.read_thetas("initial_weights.txt")
+    exemplo_back_um(layers,lamb,thetas)
     #NeuralNetwork.neural_network(layers, lamb, thetas, [[0.13], [0.42]], [[0.9], [0.23]])
+    print("")
+    print("*********** Exemplo Backpropagation 2 *********** ")
 
     lamb, layers = FilesReader.read_networks("network2.txt")
     thetas = FilesReader.read_thetas("initial_weights2.txt")

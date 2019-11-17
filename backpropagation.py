@@ -9,7 +9,7 @@ def sigmoid(x):
 
 sigmoid_vetor = np.vectorize(sigmoid)
 
-def backpropagation(exemplos, thetas, regularizacao, network, learning_rate):
+def backpropagation(exemplos, thetas, regularizacao, network, learning_rate, debug = 0):
     J = 0
     cont = 0
     gradientes = []
@@ -19,7 +19,8 @@ def backpropagation(exemplos, thetas, regularizacao, network, learning_rate):
 
     for exemplo in exemplos:
         cont += 1
-        print("Calculando gradientes com base no exemplo  " + str(cont))
+        if debug == 1:
+            print("Calculando gradientes com base no exemplo  " + str(cont))
         #entradas = np.array(exemplo[0])
         saidas = np.array(exemplo[1])
 
@@ -34,8 +35,9 @@ def backpropagation(exemplos, thetas, regularizacao, network, learning_rate):
         for i in range(len(network)):
             deltas.append([])
         deltas[-1] = error
-        print("delta"+str(len(network)))
-        print(error)
+        if debug == 1:
+            print("delta"+str(len(network)))
+            print(error)
 
         # 1.3 Para cada camada k=L-1…2, calcula os deltas para as camadas ocultas
         for k in reversed(range(1, len(network)-1)):
@@ -46,8 +48,9 @@ def backpropagation(exemplos, thetas, regularizacao, network, learning_rate):
 
             #; Remove o primeiro elemento de delta(l=k) (i.e., o delta associado ao neurônio de bias da camada k
             deltas[k] = delta[1:]
-            print("delta"+str(k+1))
-            print(deltas[k])
+            if debug == 1:
+                print("delta"+str(k+1))
+                print(deltas[k])
         # 1.4 Para cada camada k=L-1…1, atualiza os gradientes dos pesos de cada camada com base no exemplo atual
 
         for k in reversed(range(0, len(network)-1)):
@@ -62,8 +65,9 @@ def backpropagation(exemplos, thetas, regularizacao, network, learning_rate):
 
             factor = np.array(factor)
             #factor = deltas[k+1] * np.transpose(ativacao[k]) #não funciona por alguma razão
-            print("Gradientes de Theta" + str(k + 1) + " com base no exemplo" + str(cont))
-            print(factor)
+            if debug == 1:
+                print("Gradientes de Theta" + str(k + 1) + " com base no exemplo" + str(cont))
+                print(factor)
             if len(D[k]) == 0:
                 D[k] = factor
             else:
@@ -82,15 +86,16 @@ def backpropagation(exemplos, thetas, regularizacao, network, learning_rate):
         D[k] = (1/len(exemplos)) * (D[k] + Pk)
 
     #4. atualiza pesos de cada camada com base nos gradientes
-
-    print("Dataset completo processado. Calculando gradientes regularizados")
+    if debug == 1:
+        print("Dataset completo processado. Calculando gradientes regularizados")
 
     novos_thetas = np.copy(thetas)
     for k in range(0, len(network)-1):
 
         gradiente = np.multiply(learning_rate, D[k])
-        print("Gradientes finais para Theta" + str(k+1) + " (com regularizacao):")
-        print(gradiente)
+        if debug == 1:
+            print("Gradientes finais para Theta" + str(k+1) + " (com regularizacao):")
+            print(gradiente)
         gradientes.append(gradiente)
         novos_thetas[k] = thetas[k] - gradiente
 
@@ -111,9 +116,8 @@ def exemplo_back(layers,lamb, theta_matrices,instancias):
     learning_rate = 1
 
     exemplos = instancias
-    print(exemplos)
 
-    novos_thetas, gradientes = backpropagation(exemplos, thetas, regularizacao, network, learning_rate)
+    novos_thetas, gradientes = backpropagation(exemplos, thetas, regularizacao, network, learning_rate, debug=1)
     return novos_thetas, gradientes
 
 def escreve_novos_thetas(dataset_file,lamb, thetas, gradientes):

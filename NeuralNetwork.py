@@ -97,7 +97,6 @@ def propagation(exemplo, thetas, network):
     ZFinal = thetas[-1].dot(ativacao[-1])
     ativacao_final = sigmoid_vetor(ZFinal)
 
-    print(ativacao)
     return ativacao, ativacao_final
 
 

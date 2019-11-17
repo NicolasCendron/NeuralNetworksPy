@@ -11,7 +11,7 @@ def sigmoid(x):
 
 sigmoid_vetor = np.vectorize(sigmoid)
 
-def diff_gradients(gradientes_back, gradientes_numer):
+def diff_gradients(gradientes_back, gradientes_numer, debug = 0):
     str_saida = ""
     for i in range(0, len(gradientes_back)):
         dist_ab = np.linalg.norm(gradientes_numer[i] - gradientes_back[i])
@@ -21,12 +21,13 @@ def diff_gradients(gradientes_back, gradientes_numer):
         error = dist_ab / (size_a + size_b)
         str_atual = "Erro entre gradiente via backprop e gradiente numerico para Theta" + str(i + 1) + ": " + str(error)
         str_saida +=  str_atual + "\n"
-        print(str_atual)
+        if debug == 1:
+            print(str_atual)
     return str_saida[:-1]
 
 
 #epsilon=0.0000010000
-def numerical_verification(epsilon, thetas, exemplos, regularizacao, network, learning_rate):
+def numerical_verification(epsilon, thetas, exemplos, regularizacao, network, learning_rate, debug = 0):
     #somar cada peso com espilon separadamente e calcular j, substituir pelo valor do approx para o peso
     dv_thetas = copy.deepcopy(thetas)
     for i in range(0, len(thetas)):
@@ -40,12 +41,14 @@ def numerical_verification(epsilon, thetas, exemplos, regularizacao, network, le
                 approx = (first_j - second_j) / (2 * epsilon)
                 dv_thetas[i][j][k] = approx
 
-    print("Rodando verificacao numerica de gradientes (epsilon=0.0000010000)")
-    print("")
+    if debug == 1:
+        print("Rodando verificacao numerica de gradientes (epsilon=0.0000010000)")
+        print("")
     cont = 1
     for theta in dv_thetas:
-        print("Gradiente numerico de Theta" + str(cont) + ":")
-        print(theta)
+        if debug == 1:
+            print("Gradiente numerico de Theta" + str(cont) + ":")
+            print(theta)
         cont += 1
 
     novos_thetas = copy.deepcopy(thetas)
@@ -67,15 +70,16 @@ def exemplo_back(layers,lamb, theta_matrices,instancias):
     learning_rate = 1
     exemplos = instancias
 
-    novos_thetas_back, gradientes_back = bp.backpropagation(exemplos, thetas, regularizacao, network, learning_rate)
-    novos_thetas_numer, gradientes_numer = numerical_verification(0.00000010000, thetas, exemplos, regularizacao, network,learning_rate)
+    novos_thetas_back, gradientes_back = bp.backpropagation(exemplos, thetas, regularizacao, network, learning_rate,debug=1)
+    novos_thetas_numer, gradientes_numer = numerical_verification(0.00000010000, thetas, exemplos, regularizacao, network,learning_rate, debug=1)
+
     print("")
     print("Gradientes Backpropagation: ")
     print(gradientes_back)
     print("Gradientes Numerical Approximation: ")
     print(gradientes_numer)
     print("")
-    str_diferenca = diff_gradients(gradientes_back, gradientes_numer)
+    str_diferenca = diff_gradients(gradientes_back, gradientes_numer, debug=1)
 
     return novos_thetas_numer, gradientes_numer, str_diferenca
 
