@@ -61,8 +61,7 @@ def propagation(exemplo, thetas, network):
         Z.append(Zatual)
         ativacaoAtual = np.insert(sigmoid_vetor(Zatual), 0, 1)
         ativacao.append(ativacaoAtual)
-    print(thetas[-1])
-    print(ativacao[-1])
+
     ZFinal = thetas[-1].dot(ativacao[-1])
     ativacao_final = sigmoid_vetor(ZFinal)
 
@@ -88,6 +87,7 @@ def neural_network(layers,lamb, theta_matrices,inputs, outputs):
     regularization = lamb
 
     examples = []
+
     for i in range(0, len(inputs)):
         examples.append([inputs[i], outputs[i]])
 

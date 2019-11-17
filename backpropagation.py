@@ -41,8 +41,6 @@ def backpropagation(exemplos, thetas, regularizacao, network, learning_rate, deb
 
         # 1.3 Para cada camada k=L-1…2, calcula os deltas para as camadas ocultas
         for k in reversed(range(1, len(network)-1)):
-            print(thetas[k])
-            print(deltas[k+1])
             delta = np.transpose(thetas[k]).dot(deltas[k+1])  #.* ativacao[k] .* (1-ativacao[k])
             delta = np.multiply(delta, ativacao[k])
             delta = np.multiply(delta, (1 - ativacao[k]))

@@ -148,7 +148,7 @@ def read_dataset_vectorization(arquivo):
             set_normalization(input_list)
             output_list = [list(map(float, sublist)) for sublist in outputs]
             if arquivo == "wine.data":
-                output_list = set_normalization(output_list)
+                set_normalization(output_list)
             return input_list, output_list
 
 

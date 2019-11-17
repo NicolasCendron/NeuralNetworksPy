@@ -19,9 +19,6 @@ def generate_partitions(data, K):
 
     return partitions
 
-def round_of_rating(number):
-    return round(number * 2) / 2
-
 def run(data,thetas, regularization, network):
     fixedSeed = 0
     seed = 7
@@ -51,6 +48,7 @@ def run(data,thetas, regularization, network):
         respostas = []
 
         #fiz pensando so no wine
+        '''
         for i in range(len(training)):
 
             if len(training[i][1]) == 1:
@@ -70,7 +68,7 @@ def run(data,thetas, regularization, network):
             respostas.append( (index_resposta_certa,index_resposta_rede) )
 
         ut.performance_multiclass(respostas,[1,2,3])
-
+        '''
 
         #generate batches instead of using training directly
         #j_value = nn.j_function(training, thetas, regularization, network)
