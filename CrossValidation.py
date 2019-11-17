@@ -1,5 +1,7 @@
 import Util as ut
 import NeuralNetwork as nn
+import backpropagation as bp
+import copy
 
 def generate_partitions(data, K):
     partitions = []
@@ -17,6 +19,9 @@ def generate_partitions(data, K):
 
     return partitions
 
+def round_of_rating(number):
+    return round(number * 2) / 2
+
 def run(data,thetas, regularization, network):
     fixedSeed = 0
     seed = 7
@@ -24,7 +29,7 @@ def run(data,thetas, regularization, network):
     stats = []
 
     partitions = generate_partitions(data, K)
-
+    learning_rate = 1;
 
     for i in range(K):
         print("Running K = " + str(i))
@@ -35,6 +40,37 @@ def run(data,thetas, regularization, network):
             if p != i:
                 training = training + partitions[p]
         evaluation = partitions[i]
+
+        cont = 1;
+        max = 100
+        novos_thetas = copy.deepcopy(thetas)
+        while(cont < max):
+            novos_thetas, gradientes = bp.backpropagation(training,novos_thetas,regularization,network,learning_rate,0)
+            cont+=1
+
+        respostas = []
+
+        #fiz pensando so no wine
+        for i in range(len(training)):
+
+            if len(training[i][1]) == 1:
+                resposta_certa = training[i][1][0]
+                resposta_rede = round_of_rating(nn.evaluate(training[i],novos_thetas,network)[0])
+                print("Respostas")
+                print(resposta_certa)
+                print(resposta_rede)
+                respostas.append([resposta_certa, resposta_rede])
+
+            else:
+                resposta_certa = training[i][1].index()
+
+                respostas_rede = nn.evaluate(exemplo,novos_thetas,network)
+                index_resposta_rede = respostas_rede.index(max(respostas_rede))
+
+            respostas.append( (index_resposta_certa,index_resposta_rede) )
+
+        ut.performance_multiclass(respostas,[1,2,3])
+
 
         #generate batches instead of using training directly
         #j_value = nn.j_function(training, thetas, regularization, network)
@@ -67,3 +103,5 @@ def run(data,thetas, regularization, network):
         stats.append(ut.evaluate_forest(forest, evaluation, all_classes))
     ut.print_stats(stats, all_classes)
     '''
+
+    return novos_thetas, gradientes

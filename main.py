@@ -3,6 +3,7 @@ import numpy as np
 import math
 import NeuralNetwork
 import copy
+import sys
 import backpropagation as bp
 import  verificacao_numerica as vn
 
@@ -63,8 +64,7 @@ def exemplo_back_two(layers,lamb,theta_matrices):
                                                                   learning_rate, debug=1)
     vn.diff_gradients(gradientes_back, gradientes_numer)
 
-if __name__ == '__main__':
-
+def exemplos():
     print("*********** Exemplo Backpropagation 1 *********** ")
 
     lamb, layers = FilesReader.read_networks("network.txt")
@@ -77,4 +77,39 @@ if __name__ == '__main__':
     lamb, layers = FilesReader.read_networks("network2.txt")
     thetas = FilesReader.read_thetas("initial_weights2.txt")
     exemplo_back_two(layers, lamb,thetas)
-    #NeuralNetwork.neural_network(layers, lamb, thetas, [[0.32, 0.68], [0.83, 0.02]], [[0.75, 0.98], [0.75, 0.28]])
+
+def salva_resultados(dataset_file, thetas):
+    nome_arquivo = "resultado_" + dataset_file
+    str_arquivo = ""
+    for camada in thetas:
+        for line in camada:
+            for elemento in line:
+                str_arquivo +=  str(round(elemento,5)) + ", "
+            str_arquivo = str_arquivo[:-2] + '; '
+        str_arquivo = str_arquivo[:-2] + '\n'
+
+    str_arquivo = str_arquivo[:-2]
+    #print(str_arquivo)
+    f = open(nome_arquivo, "w")
+    f.write(str_arquivo)
+    f.close()
+
+if __name__ == '__main__':
+
+    if len(sys.argv) != 4:
+       exemplos()
+    else:
+        # python3 main.py network_teste1.txt wine_initial_weights.txt wine.data
+        # python3 main.py network_teste1.txt resultado_backpropagation.txt dataset_teste1
+        network_file = sys.argv[1]
+        weights_file = sys.argv[2]
+        dataset_file = sys.argv[3]
+
+        lamb, layers = FilesReader.read_networks(network_file)
+        thetas = FilesReader.read_thetas(weights_file)
+        instancias = FilesReader.read_dataset_vectorization(dataset_file)
+
+        novos_thetas, gradientes =  NeuralNetwork.neural_network(layers, lamb, thetas, instancias[0],instancias[1])
+
+        salva_resultados(dataset_file, novos_thetas)
+
