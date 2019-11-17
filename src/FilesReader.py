@@ -59,6 +59,7 @@ def read_dataset(arquivo):
 
 def read_simple_dataset(arquivo):
     instancias = []
+    arquivo = "../data/" + arquivo
 
     num_lines = sum(1 for line in open(arquivo))
 
@@ -80,6 +81,7 @@ def read_simple_dataset(arquivo):
 
 
 def read_networks(arquivo):
+    arquivo = "../networks/" + arquivo
     with open(arquivo) as f:
         lamb = float(f.readline())
         layers = []
@@ -89,6 +91,7 @@ def read_networks(arquivo):
     return lamb, layers
 
 def read_thetas(arquivo):
+    arquivo = "../weights/" + arquivo
     with open(arquivo) as f:
 
         matrix_list = []
@@ -107,7 +110,7 @@ def read_thetas(arquivo):
         return matrix_list
 
 def read_dataset_vectorization(arquivo):
-    with open(arquivo) as dataFile:
+    with open("../data/" + arquivo) as dataFile:
         inputs = []
         outputs = []
         if arquivo == "pima.tsv":

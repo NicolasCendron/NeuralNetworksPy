@@ -79,7 +79,7 @@ def exemplos():
     exemplo_back_two(layers, lamb,thetas)
 
 def salva_resultados(dataset_file, thetas):
-    nome_arquivo = "resultado_" + dataset_file
+    nome_arquivo = "../results/resultado_" + dataset_file
     str_arquivo = ""
     for camada in thetas:
         for line in camada:

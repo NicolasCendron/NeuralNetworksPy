@@ -85,7 +85,7 @@ def exemplo_back(layers,lamb, theta_matrices,instancias):
 
 
 def escreve_novos_thetas(dataset_file, lamb, thetas, gradientes, str_diferenca):
-    nome_arquivo = "resultado_verificacao_numerica.txt"
+    nome_arquivo =  "../results/" + "resultado_verificacao_numerica.txt"
     str_arquivo = ""
 
     str_arquivo += "Dataset: " + dataset_file + "\n"
