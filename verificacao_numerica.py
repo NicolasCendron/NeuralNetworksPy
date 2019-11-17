@@ -12,13 +12,18 @@ def sigmoid(x):
 sigmoid_vetor = np.vectorize(sigmoid)
 
 def diff_gradients(gradientes_back, gradientes_numer):
+    str_saida = ""
     for i in range(0, len(gradientes_back)):
         dist_ab = np.linalg.norm(gradientes_numer[i] - gradientes_back[i])
         size_a = np.linalg.norm(gradientes_back[i])
         size_b = np.linalg.norm(gradientes_numer[i])
 
         error = dist_ab / (size_a + size_b)
-        print("Erro entre gradiente via backprop e gradiente numerico para Theta" + str(i + 1) + ": " + str(error))
+        str_atual = "Erro entre gradiente via backprop e gradiente numerico para Theta" + str(i + 1) + ": " + str(error)
+        str_saida +=  str_atual + "\n"
+        print(str_atual)
+    return str_saida[:-1]
+
 
 #epsilon=0.0000010000
 def numerical_verification(epsilon, thetas, exemplos, regularizacao, network, learning_rate):
@@ -70,24 +75,38 @@ def exemplo_back(layers,lamb, theta_matrices,instancias):
     print("Gradientes Numerical Approximation: ")
     print(gradientes_numer)
     print("")
-    diff_gradients(gradientes_back, gradientes_numer)
+    str_diferenca = diff_gradients(gradientes_back, gradientes_numer)
 
-    return novos_thetas_numer
+    return novos_thetas_numer, gradientes_numer, str_diferenca
 
-def escreve_novos_thetas(thetas):
-    print("")
-    print("Thetas gerados através da Verificação Numérica:")
-    print(thetas)
+
+def escreve_novos_thetas(dataset_file, lamb, thetas, gradientes, str_diferenca):
     nome_arquivo = "resultado_verificacao_numerica.txt"
     str_arquivo = ""
 
+    str_arquivo += "Dataset: " + dataset_file + "\n"
+    str_arquivo += "Fator de Regularização: " + str(lamb) + "\n"
+    str_arquivo += "\n"
+    str_arquivo += "Novos Thetas" + "\n"
     for camada in thetas:
         for line in camada:
             for elemento in line:
                 str_arquivo +=  str(round(elemento,5)) + ", "
             str_arquivo = str_arquivo[:-2] + '; '
         str_arquivo = str_arquivo[:-2] + '\n'
-    str_arquivo = str_arquivo[:-2]
+
+    str_arquivo += "Gradientes" + "\n"
+
+    for camada in gradientes:
+        for line in camada:
+            for elemento in line:
+                str_arquivo += str(round(elemento, 5)) + ", "
+            str_arquivo = str_arquivo[:-2] + '; '
+        str_arquivo = str_arquivo[:-2] + '\n'
+
+    str_arquivo += str_diferenca
+
+    #str_arquivo = str_arquivo[:-2]
     #print(str_arquivo)
     f = open(nome_arquivo, "w")
     f.write(str_arquivo)
@@ -108,6 +127,6 @@ if __name__ == '__main__':
         lamb, layers = FilesReader.read_networks(network_file)
         thetas = FilesReader.read_thetas(weights_file)
         instancias = FilesReader.read_simple_dataset(dataset_file)
-        novos_thetas = exemplo_back(layers, lamb, thetas,instancias)
+        novos_thetas, gradientes, str_diferenca = exemplo_back(layers, lamb, thetas,instancias)
 
-        escreve_novos_thetas(novos_thetas)
+        escreve_novos_thetas(dataset_file,lamb, novos_thetas, gradientes, str_diferenca)

@@ -114,19 +114,33 @@ def exemplo_back(layers,lamb, theta_matrices,instancias):
     print(exemplos)
 
     novos_thetas, gradientes = backpropagation(exemplos, thetas, regularizacao, network, learning_rate)
-    return novos_thetas
+    return novos_thetas, gradientes
 
-def escreve_novos_thetas(thetas):
+def escreve_novos_thetas(dataset_file,lamb, thetas, gradientes):
     print(thetas)
     nome_arquivo = "resultado_backpropagation.txt"
     str_arquivo = ""
 
+    str_arquivo += "Dataset: " + dataset_file + "\n"
+    str_arquivo += "Fator de Regularização: " + str(lamb) + "\n"
+    str_arquivo += "\n"
+    str_arquivo += "Novos Thetas" + "\n"
     for camada in thetas:
         for line in camada:
             for elemento in line:
                 str_arquivo +=  str(round(elemento,5)) + ", "
             str_arquivo = str_arquivo[:-2] + '; '
         str_arquivo = str_arquivo[:-2] + '\n'
+
+    str_arquivo += "Gradientes" + "\n"
+
+    for camada in gradientes:
+        for line in camada:
+            for elemento in line:
+                str_arquivo += str(round(elemento, 5)) + ", "
+            str_arquivo = str_arquivo[:-2] + '; '
+        str_arquivo = str_arquivo[:-2] + '\n'
+
     str_arquivo = str_arquivo[:-2]
     #print(str_arquivo)
     f = open(nome_arquivo, "w")
@@ -148,9 +162,9 @@ if __name__ == '__main__':
         lamb, layers = FilesReader.read_networks(network_file)
         thetas = FilesReader.read_thetas(weights_file)
         instancias = FilesReader.read_simple_dataset(dataset_file)
-        novos_thetas = exemplo_back(layers, lamb, thetas,instancias)
+        novos_thetas, gradientes = exemplo_back(layers, lamb, thetas,instancias)
 
-        escreve_novos_thetas(novos_thetas)
+        escreve_novos_thetas(dataset_file,lamb, novos_thetas, gradientes)
 
         #lamb, layers = FilesReader.read_networks("network.txt")
         #thetas = FilesReader.read_thetas("initial_weights.txt")
