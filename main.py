@@ -76,14 +76,12 @@ def calculaJ(mini_batch, thetas, regularization, network):
 #    print(str(J + S))
     return J + S
 
-
-
 def backpropagation(exemplos, thetas, regularizacao, network, learning_rate):
     J = 0
     cont = 0
     # # print('network')
     # # print(network)
-
+    gradientes = []
     D = []
     for i in range(len(network) - 1):
         D.append([])
@@ -162,6 +160,7 @@ def backpropagation(exemplos, thetas, regularizacao, network, learning_rate):
 
     #print(vetor_learning_rate)
     print("Dataset completo processado. Calculando gradientes regularizados")
+
     novos_thetas = np.copy(thetas)
     for k in range(0, len(network)-1):
 
@@ -172,15 +171,16 @@ def backpropagation(exemplos, thetas, regularizacao, network, learning_rate):
         gradiente = np.multiply(learning_rate, D[k])
         print("Gradientes finais para Theta" + str(k+1) + " (com regularizacao):")
         print(gradiente)
+        gradientes.append(gradiente)
         # thetas finais errados?
         novos_thetas[k] = thetas[k] - gradiente
 
-    return novos_thetas
+    return novos_thetas, gradientes
 
 #epsilon=0.0000010000
-def numerical_verification(epsilon, thetas, exemplos, regularizacao, network):
+def numerical_verification(epsilon, thetas, exemplos, regularizacao, network, learning_rate):
     #somar cada peso com espilon separadamente e calcular j, substituir pelo valor do approx para o peso
-    nv_thetas = copy.deepcopy(thetas)
+    dv_thetas = copy.deepcopy(thetas)
     for i in range(0, len(thetas)):
         for j in range(0, len(thetas[i])):
             for k in range(0, len(thetas[i][j])):
@@ -190,16 +190,19 @@ def numerical_verification(epsilon, thetas, exemplos, regularizacao, network):
                 copy_thetas[i][j][k] = thetas[i][j][k] - epsilon
                 second_j = calculaJ(exemplos, copy_thetas, regularizacao, network)
                 approx = (first_j - second_j) / (2 * epsilon)
-                nv_thetas[i][j][k] = approx
+                dv_thetas[i][j][k] = approx
 
     print("Rodando verificacao numerica de gradientes (epsilon=0.0000010000)")
     cont = 1
-    for theta in nv_thetas:
+    for theta in dv_thetas:
         print("Gradiente numerico de Theta" + str(cont) + ":")
         print(theta)
         cont += 1
 
-    return nv_thetas
+    novos_thetas = copy.deepcopy(thetas)
+    novos_thetas = novos_thetas - dv_thetas * learning_rate
+
+    return novos_thetas, dv_thetas
 
 def exemplo_back_um(layers,lamb, theta_matrices):
     # 3 camadas [1 2 1]
@@ -227,10 +230,10 @@ def exemplo_back_um(layers,lamb, theta_matrices):
 
     #print(exemplos)
     #Jexemplo = calculaJ(exemplos, thetas, regularizacao, network)#, learning_rate)
-    novos_thetas = backpropagation(exemplos, thetas, regularizacao, network, learning_rate)
-    nv_thetas = numerical_verification(0.0000010000, thetas, exemplos, regularizacao, network)
+    novos_thetas_back, gradientes_back = backpropagation(exemplos, thetas, regularizacao, network, learning_rate)
+    novos_thetas_numer, gradientes_numer = numerical_verification(0.00000010000, thetas, exemplos, regularizacao, network,learning_rate)
 
-
+    diff_gradients(gradientes_back, gradientes_numer)
 
 def exemplo_back_two(layers,lamb,theta_matrices):
     # 4 camadas [2 4 3 2]
@@ -255,8 +258,20 @@ def exemplo_back_two(layers,lamb,theta_matrices):
 
     #print(exemplos)
     #Jexemplo = calculaJ(exemplos, thetas, regularizacao, network)#, learning_rate)
-    novos_thetas = backpropagation(exemplos, thetas, regularizacao, network, learning_rate)
-    nv_thetas = numerical_verification(0.0000010000, thetas, exemplos, regularizacao, network)
+    novos_thetas_back, gradientes_back = backpropagation(exemplos, thetas, regularizacao, network, learning_rate)
+    novos_thetas_numer, gradientes_numer = numerical_verification(0.00000010000, thetas, exemplos, regularizacao, network,
+                                                                  learning_rate)
+    diff_gradients(gradientes_back, gradientes_numer)
+
+def diff_gradients(gradientes_back, gradientes_numer):
+    for i in range(0, len(gradientes_back)):
+        dist_ab = np.linalg.norm(gradientes_numer[i] - gradientes_back[i])
+        size_a = np.linalg.norm(gradientes_back[i])
+        size_b = np.linalg.norm(gradientes_numer[i])
+
+        error = dist_ab / (size_a + size_b)
+        print("Erro entre gradiente via backprop e gradiente numerico para Theta" + str(i + 1) + ": " + str(error))
+
 
 if __name__ == '__main__':
 
@@ -275,9 +290,9 @@ if __name__ == '__main__':
     #inputs, outputs = FilesReader.read_dataset_vectorization(arquivo)
     #NeuralNetwork.neural_network(layers,lamb,thetas,inputs, outputs)
 
-    lamb, layers = FilesReader.read_networks("network.txt")
-    thetas = FilesReader.read_thetas("initial_weights.txt")
-    exemplo_back_um(layers,lamb,thetas)
+    #lamb, layers = FilesReader.read_networks("network.txt")
+    #thetas = FilesReader.read_thetas("initial_weights.txt")
+    #exemplo_back_um(layers,lamb,thetas)
     #NeuralNetwork.neural_network(layers, lamb, thetas, [[0.13], [0.42]], [[0.9], [0.23]])
 
     lamb, layers = FilesReader.read_networks("network2.txt")

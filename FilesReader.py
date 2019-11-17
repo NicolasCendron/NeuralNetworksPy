@@ -67,7 +67,6 @@ def read_simple_dataset(arquivo):
             instancia_atual = f.readline()
             entradas = []
             saidas = []
-            print(instancia_atual)
             txt_entrada, txt_saida = instancia_atual.split(';')
 
             for entrada in txt_entrada.split(','):
