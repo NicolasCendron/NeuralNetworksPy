@@ -101,6 +101,9 @@ if __name__ == '__main__':
     else:
         # python3 main.py network_teste1.txt wine_initial_weights.txt wine.data
         # python3 main.py network_teste1.txt resultado_backpropagation.txt dataset_teste1
+        # python3 main.py wine_network.txt wine_initial_weights.txt wine.data
+        # python3 main.py pima_network.txt pima_initial_weights.txt pima.tsv
+        # python3 main.py ionosphere_network.txt ionosphere_initial_weights.txt ionosphere.data
         network_file = sys.argv[1]
         weights_file = sys.argv[2]
         dataset_file = sys.argv[3]
@@ -109,7 +112,7 @@ if __name__ == '__main__':
         thetas = FilesReader.read_thetas(weights_file)
         instancias = FilesReader.read_dataset_vectorization(dataset_file)
 
-        novos_thetas, gradientes =  NeuralNetwork.neural_network(layers, lamb, thetas, instancias[0],instancias[1])
+        novos_thetas, gradientes = NeuralNetwork.neural_network(layers, lamb, thetas, instancias[0],instancias[1])
 
         salva_resultados(dataset_file, novos_thetas)
 
