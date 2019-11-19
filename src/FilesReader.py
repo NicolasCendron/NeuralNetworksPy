@@ -128,9 +128,26 @@ def read_dataset_vectorization(arquivo):
             if arquivo == "wine.data":
                 outputs.append(row[0])
                 inputs.append(row[1:])
+            elif arquivo == "wdbc.data":
+                outputs.append(row[1])
+                inputs.append(row[2:])
             else:
                 inputs.append(row[:-1])
                 outputs.append(row[-1])
+
+        if arquivo == "wdbc.data":
+            # set outputs to g = 0 and b = 1
+            float_outputs = []
+
+            for output in outputs:
+                if output == "B":
+                    float_outputs.append([0.0])
+                else:
+                    float_outputs.append([1.0])
+
+            input_list = [list(map(float, sublist)) for sublist in inputs]
+            set_normalization(input_list)
+            return input_list, float_outputs
 
         if arquivo == "ionosphere.data":
             #set outputs to g = 0 and b = 1

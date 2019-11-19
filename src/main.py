@@ -99,11 +99,21 @@ if __name__ == '__main__':
     if len(sys.argv) != 4:
        exemplos()
     else:
+        #teste
         # python3 main.py network_teste1.txt wine_initial_weights.txt wine.data
         # python3 main.py network_teste1.txt resultado_backpropagation.txt dataset_teste1
+        #WINE
         # python3 main.py wine_network.txt wine_initial_weights.txt wine.data
+        #PIMA
         # python3 main.py pima_network.txt pima_initial_weights.txt pima.tsv
+
+        #IONOSPHERE
         # python3 main.py ionosphere_network.txt ionosphere_initial_weights.txt ionosphere.data
+
+        # CANCER --> Com problema / Revisar FilesReader.py
+        #Tem que retirar o Atributo ID
+        # python3 main.py wdbc_network.txt wdbc_initial_weights.txt wdbc.data
+
         network_file = sys.argv[1]
         weights_file = sys.argv[2]
         dataset_file = sys.argv[3]

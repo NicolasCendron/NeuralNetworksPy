@@ -2,7 +2,7 @@ import Util as ut
 import NeuralNetwork as nn
 import backpropagation as bp
 import copy
-
+import numpy as np
 def generate_partitions(data, K):
     partitions = []
     ordered_data = data
@@ -39,37 +39,36 @@ def run(data,thetas, regularization, network):
         evaluation = partitions[i]
 
         cont = 1;
-        max = 100
+        max_iteracoes = 1000
         novos_thetas = copy.deepcopy(thetas)
-        while(cont < max):
+        while(cont < max_iteracoes):
             novos_thetas, gradientes = bp.backpropagation(training,novos_thetas,regularization,network,learning_rate,0)
             cont+=1
 
         respostas = []
 
-        #fiz pensando so no wine
-        '''
-        for i in range(len(training)):
+        for i in range(len(evaluation)):
 
-            if len(training[i][1]) == 1:
-                resposta_certa = training[i][1][0]
-                resposta_rede = round_of_rating(nn.evaluate(training[i],novos_thetas,network)[0])
-                print("Respostas")
-                print(resposta_certa)
-                print(resposta_rede)
-                respostas.append([resposta_certa, resposta_rede])
+            if network[-1] == 1: # Se possui apenas uma saida
+                resposta_certa = evaluation[i][1][0]
+                resposta_rede = nn.evaluate(evaluation[i],novos_thetas,network)
+                resposta_rede_int = round(resposta_rede[0])
+                respostas.append( (resposta_certa, resposta_rede_int) )
 
-            else:
-                resposta_certa = training[i][1].index()
+            else: # Se possui mais de uma saída
+                index_resposta_certa = evaluation[i][1].index(max(evaluation[i][1]))
 
-                respostas_rede = nn.evaluate(exemplo,novos_thetas,network)
-                index_resposta_rede = respostas_rede.index(max(respostas_rede))
+                respostas_rede = nn.evaluate(evaluation[i],novos_thetas,network)
+                index_resposta_rede = np.where( respostas_rede == max(respostas_rede))[0][0]
+                respostas.append( (index_resposta_certa,index_resposta_rede) )
 
-            respostas.append( (index_resposta_certa,index_resposta_rede) )
+        print(respostas)
+        if network[-1] == 1: # Se possui apenas uma saida
+            resultado = ut.performance_binary(respostas,[0,1])
+        else:  # Se possui mais de uma saída
+            resultado = ut.performance_multiclass(respostas,[0,1,2])
 
-        ut.performance_multiclass(respostas,[1,2,3])
-        '''
-
+        print(resultado)
         #generate batches instead of using training directly
         #j_value = nn.j_function(training, thetas, regularization, network)
         '''

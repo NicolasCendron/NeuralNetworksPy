@@ -68,6 +68,7 @@ def performance_binary(list_tuples, classes):
     recall = rev(VP, FN)
     f = f1_score(precision, recall)
 
+    print("Precision , Recall , F1-Score")
     return precision, recall, f
 
 # performance_multiclass: compute the performance of predictions
