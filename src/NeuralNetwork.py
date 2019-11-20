@@ -57,8 +57,8 @@ def propagation(exemplo, thetas, network):
     ativacao.append(np.array([1] + entrada))
     Z = []
     for i in range(1,len(network) - 1):
-        print(thetas[i - 1])
-        print(ativacao[i-1])
+        #print(thetas[i - 1])
+        #print(ativacao[i-1])
         Zatual = (thetas[i-1]).dot(ativacao[i-1])
         Z.append(Zatual)
         ativacaoAtual = np.insert(sigmoid_vetor(Zatual), 0, 1)
