@@ -71,7 +71,7 @@ def propagation(exemplo, thetas, network):
 
 
 
-def neural_network(layers,lamb, theta_matrices,inputs, outputs):
+def neural_network(layers,lamb, theta_matrices,inputs, outputs,dataset_file):
     network = np.array(layers)
 
     thetas = [theta_matrices[0]]
@@ -95,9 +95,9 @@ def neural_network(layers,lamb, theta_matrices,inputs, outputs):
 
     #sort examples
     #get training set from examples - cross validation
-    thetas_finais, gradientes_finais = cv.run(examples,thetas, regularization, network)
-    j_value = calculaJ(examples, thetas_finais, regularization, network)
-    print(j_value)
+    thetas_finais, gradientes_finais = cv.run(examples,thetas, regularization, network,dataset_file)
+    #j_value = calculaJ(examples, thetas_finais, regularization, network)
+    #print(j_value)
     return thetas_finais, gradientes_finais
 
 

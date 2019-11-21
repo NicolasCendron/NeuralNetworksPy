@@ -107,11 +107,13 @@ if __name__ == '__main__':
         #PIMA
         # python3 main.py pima_network.txt pima_initial_weights.txt pima.tsv
 
+        #PIMA 6 neuronios na camada oculta e mais 2 neuronios na segunda camada oculta
+        # python3 main.py pima_network_test.txt pima_initial_weights_test.txt pima.tsv
+
         #IONOSPHERE
         # python3 main.py ionosphere_network.txt ionosphere_initial_weights.txt ionosphere.data
 
-        # CANCER --> Com problema / Revisar FilesReader.py
-        #Tem que retirar o Atributo ID
+        # CANCER
         # python3 main.py wdbc_network.txt wdbc_initial_weights.txt wdbc.data
 
         network_file = sys.argv[1]
@@ -122,7 +124,7 @@ if __name__ == '__main__':
         thetas = FilesReader.read_thetas(weights_file)
         instancias = FilesReader.read_dataset_vectorization(dataset_file)
 
-        novos_thetas, gradientes = NeuralNetwork.neural_network(layers, lamb, thetas, instancias[0],instancias[1])
+        novos_thetas, gradientes = NeuralNetwork.neural_network(layers, lamb, thetas, instancias[0],instancias[1],dataset_file)
 
         salva_resultados(dataset_file, novos_thetas)
 

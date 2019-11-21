@@ -1,15 +1,6 @@
 import math
 import numpy as np
 
-'''
-def get_classes(attribute_matrix):
-    for atributo in attribute_matrix:
-        if atributo[0] == "Class":
-            tipos_classificacao = atributo[1]
-            break
-    return tipos_classificacao
-'''
-
 def log2(x):
     return math.log(x) / math.log(2)
 '''
@@ -68,7 +59,7 @@ def performance_binary(list_tuples, classes):
     recall = rev(VP, FN)
     f = f1_score(precision, recall)
 
-    print("Precision , Recall , F1-Score")
+    #print("Precision , Recall , F1-Score")
     return precision, recall, f
 
 # performance_multiclass: compute the performance of predictions
