@@ -22,35 +22,65 @@ def generate_partitions(data, K):
 def run(data,thetas, regularization, network,dataset_file):
     K = 10
 
+    if(dataset_file == "wine.data"): #ok
+        min_diff = 0.001
+        B = 10
+
+    if(dataset_file == "wdbc.data"): #ok
+        B = 12
+        min_diff = 0.001
+
+    if(dataset_file == "pima.tsv"): #mais do que 0.15 de regularizacao piora muito os resultados
+        #melhores valores que encontrei, mas a performance ainda está abaixo dos outros datasets
+        B = 5
+        min_diff = 0.00002
+
+    if(dataset_file == "ionosphere.data"): #ok melhor B = 2 ou 5
+        B = 5
+        min_diff = 0.0002
+
     partitions = generate_partitions(data, K)
-    learning_rate = 0.5;
+    learning_rate = 0.5
 
     for i in range(K):
         print("Running K = " + str(i))
 
         novos_thetas = copy.deepcopy(thetas)
         evaluation = partitions[i]
-
-        # using k mini-batches
+        training = []
         for p in range(K):
             if p != i:
-                cont = 1
-                initial_j_value = nn.calculaJ(partitions[p], novos_thetas, regularization, network)
-                while (cont < 1000):
-                    novos_thetas, gradientes = bp.backpropagation(partitions[p], novos_thetas, regularization, network,
-                                                              learning_rate, 0)
-                    cont += 1
-                    if (cont % 60) == 0: #for 0.88 F1-Score
+                training = training + partitions[p]
+        batch_p = generate_partitions(training, B)
+
+        # using b mini-batches
+        for p in range(B):
+            cont = 1
+            initial_j_value = nn.calculaJ(batch_p[p], novos_thetas, regularization, network)
+            #print("j inicial:" + str(initial_j_value))
+            while (cont < 1000):
+                novos_thetas, gradientes = bp.backpropagation(batch_p[p], novos_thetas, regularization, network,
+                                                          learning_rate, 0)
+                cont += 1
+                if (cont % 20) == 0: #60
+                    j_value = nn.calculaJ(batch_p[p], novos_thetas, regularization, network)
+                    #print("j value:" + str(j_value))
+                    if(initial_j_value >= j_value):
+                        diff = initial_j_value - j_value
+                    else:
+                        diff = j_value - initial_j_value
+                    #print("diferenca: " + str(diff))
+                    #print("performance batch:" + str(p))
+                    #performance = calculate_performance(network, evaluation, novos_thetas)
+                    if (diff < min_diff):
+                        print("performance batch: " + str(p))
                         performance = calculate_performance(network, evaluation, novos_thetas)
-                        if(dataset_file != "wine.data"):
-                            if (performance[2] > 0.85):
-                                break
-                        else:
-                            j_value = nn.calculaJ(partitions[p], novos_thetas, regularization, network)
-                            diff = initial_j_value - j_value
-                            if (diff < 0.02):
-                                break
-                            initial_j_value = j_value
+                        break
+                    initial_j_value = j_value
+                if(cont == 999):
+                    print("estouro batch: " + str(p))
+                    performance = calculate_performance(network, evaluation, novos_thetas)
+
 
         # generate cross validation training (K-1) and evaluation (1) partitions
         '''
