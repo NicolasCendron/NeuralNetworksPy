@@ -14,7 +14,7 @@ def evaluate(exemplo, thetas, network):
     ativacao, ativacao_final = propagation(exemplo, thetas, network)
     return ativacao_final
 
-def calculaJ(mini_batch, thetas, regularization, network):
+def calculate_j(mini_batch, thetas, regularization, network):
     J = 0
     cont = 0
     for example in mini_batch:
@@ -83,7 +83,7 @@ def neural_network(layers,lamb, theta_matrices,inputs, outputs,dataset_file):
         examples.append([inputs[i], outputs[i]])
 
     thetas_finais, gradientes_finais = cv.run(examples,thetas, regularization, network,dataset_file)
-    #j_value = calculaJ(examples, thetas_finais, regularization, network)
+    #j_value = calculate_j(examples, thetas_finais, regularization, network)
     #print(j_value)
     return thetas_finais, gradientes_finais
 

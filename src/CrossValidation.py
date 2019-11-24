@@ -56,14 +56,14 @@ def run(data,thetas, regularization, network,dataset_file):
         # using b mini-batches
         for p in range(B):
             cont = 1
-            initial_j_value = nn.calculaJ(batch_p[p], novos_thetas, regularization, network)
+            initial_j_value = nn.calculate_j(batch_p[p], novos_thetas, regularization, network)
             #print("j inicial:" + str(initial_j_value))
             while (cont < 1000):
                 novos_thetas, gradientes = bp.backpropagation(batch_p[p], novos_thetas, regularization, network,
                                                           learning_rate, 0)
                 cont += 1
                 if (cont % 20) == 0: #60
-                    j_value = nn.calculaJ(batch_p[p], novos_thetas, regularization, network)
+                    j_value = nn.calculate_j(batch_p[p], novos_thetas, regularization, network)
                     #print("j value:" + str(j_value))
                     if(initial_j_value >= j_value):
                         diff = initial_j_value - j_value

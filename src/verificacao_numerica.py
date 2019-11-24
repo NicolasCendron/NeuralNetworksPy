@@ -56,9 +56,9 @@ def numerical_verification(epsilon, thetas, exemplos, regularizacao, network, le
             for k in range(0, len(thetas[i][j])):
                 copy_thetas = copy.deepcopy(thetas)
                 copy_thetas[i][j][k] = thetas[i][j][k] + epsilon
-                first_j = NeuralNetwork.calculaJ(exemplos, copy_thetas, regularizacao, network)
+                first_j = NeuralNetwork.calculate_j(exemplos, copy_thetas, regularizacao, network)
                 copy_thetas[i][j][k] = thetas[i][j][k] - epsilon
-                second_j = NeuralNetwork.calculaJ(exemplos, copy_thetas, regularizacao, network)
+                second_j = NeuralNetwork.calculate_j(exemplos, copy_thetas, regularizacao, network)
                 approx = (first_j - second_j) / (2 * epsilon)
                 dv_thetas[i][j][k] = approx
 
