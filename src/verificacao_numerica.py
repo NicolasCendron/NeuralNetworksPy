@@ -13,10 +13,31 @@ sigmoid_vetor = np.vectorize(sigmoid)
 
 def diff_gradients(gradientes_back, gradientes_numer, debug = 0):
     str_saida = ""
+    '''
+    for i in range(0, len(gradientes_numer)):
+        error_test = 0
+        cont = 0
+        for j in range(0, len(gradientes_numer[i])):
+            for k in range(0, len(gradientes_numer[i][j])):
+                test = gradientes_numer[i][j][k]
+                test2 = gradientes_back[i][j][k]
+                diff = test - test2
+                error_test = error_test + abs(diff)
+                cont +=1
+        error_test = error_test / cont
+        str_atual = "Erro entre gradiente via backprop e gradiente numerico para Theta" + str(i + 1) + ": " + str(error_test)
+        str_saida += str_atual + "\n"
+        if debug == 1:
+            print(str_atual)
+
+    '''
     for i in range(0, len(gradientes_back)):
         dist_ab = np.linalg.norm(gradientes_numer[i] - gradientes_back[i])
         size_a = np.linalg.norm(gradientes_back[i])
         size_b = np.linalg.norm(gradientes_numer[i])
+
+        test = size_a + size_b
+        test2 = size_b - size_a
 
         error = dist_ab / (size_a + size_b)
         str_atual = "Erro entre gradiente via backprop e gradiente numerico para Theta" + str(i + 1) + ": " + str(error)

@@ -144,3 +144,19 @@ def set_normalization(input_list):
 def normalize_value(value, max_value, min_value):
     normalized_value = round((value - min_value) / (max_value - min_value),5)
     return normalized_value
+
+def save_results(dataset_file, thetas):
+    nome_arquivo = "../results/resultado_" + dataset_file
+    str_arquivo = ""
+    for camada in thetas:
+        for line in camada:
+            for elemento in line:
+                str_arquivo +=  str(round(elemento,5)) + ", "
+            str_arquivo = str_arquivo[:-2] + '; '
+        str_arquivo = str_arquivo[:-2] + '\n'
+
+    str_arquivo = str_arquivo[:-2]
+    #print(str_arquivo)
+    f = open(nome_arquivo, "w")
+    f.write(str_arquivo)
+    f.close()

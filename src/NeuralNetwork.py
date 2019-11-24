@@ -9,17 +9,6 @@ def sigmoid(x):
 
 sigmoid_vetor = np.vectorize(sigmoid)
 
-def evaluate_mini_batch():
-    pass
-
-def numeric_gradient():
-    pass
-
-def feature_normalization():
-    pass
-
-def create_batches():
-    pass
 
 def evaluate(exemplo, thetas, network):
     ativacao, ativacao_final = propagation(exemplo, thetas, network)
@@ -93,8 +82,6 @@ def neural_network(layers,lamb, theta_matrices,inputs, outputs,dataset_file):
     for i in range(0, len(inputs)):
         examples.append([inputs[i], outputs[i]])
 
-    #sort examples
-    #get training set from examples - cross validation
     thetas_finais, gradientes_finais = cv.run(examples,thetas, regularization, network,dataset_file)
     #j_value = calculaJ(examples, thetas_finais, regularization, network)
     #print(j_value)

@@ -36,7 +36,7 @@ def exemplo_back_um(layers,lamb, theta_matrices):
     novos_thetas_back, gradientes_back = bp.backpropagation(exemplos, thetas, regularizacao, network, learning_rate, debug=1)
     novos_thetas_numer, gradientes_numer = vn.numerical_verification(0.00000010000, thetas, exemplos, regularizacao, network,learning_rate, debug=1)
 
-    vn.diff_gradients(gradientes_back, gradientes_numer)
+    vn.diff_gradients(gradientes_back, gradientes_numer,1)
 
 def exemplo_back_two(layers,lamb,theta_matrices):
     # 4 camadas [2 4 3 2]
@@ -62,7 +62,7 @@ def exemplo_back_two(layers,lamb,theta_matrices):
     novos_thetas_back, gradientes_back = bp.backpropagation(exemplos, thetas, regularizacao, network, learning_rate, debug=1)
     novos_thetas_numer, gradientes_numer = vn.numerical_verification(0.00000010000, thetas, exemplos, regularizacao, network,
                                                                   learning_rate, debug=1)
-    vn.diff_gradients(gradientes_back, gradientes_numer)
+    vn.diff_gradients(gradientes_back, gradientes_numer,1)
 
 def exemplos():
     print("*********** Exemplo Backpropagation 1 *********** ")
@@ -70,7 +70,6 @@ def exemplos():
     lamb, layers = FilesReader.read_networks("network.txt")
     thetas = FilesReader.read_thetas("initial_weights.txt")
     exemplo_back_um(layers,lamb,thetas)
-    #NeuralNetwork.neural_network(layers, lamb, thetas, [[0.13], [0.42]], [[0.9], [0.23]])
     print("")
     print("*********** Exemplo Backpropagation 2 *********** ")
 
@@ -78,21 +77,6 @@ def exemplos():
     thetas = FilesReader.read_thetas("initial_weights2.txt")
     exemplo_back_two(layers, lamb,thetas)
 
-def salva_resultados(dataset_file, thetas):
-    nome_arquivo = "../results/resultado_" + dataset_file
-    str_arquivo = ""
-    for camada in thetas:
-        for line in camada:
-            for elemento in line:
-                str_arquivo +=  str(round(elemento,5)) + ", "
-            str_arquivo = str_arquivo[:-2] + '; '
-        str_arquivo = str_arquivo[:-2] + '\n'
-
-    str_arquivo = str_arquivo[:-2]
-    #print(str_arquivo)
-    f = open(nome_arquivo, "w")
-    f.write(str_arquivo)
-    f.close()
 
 if __name__ == '__main__':
 
@@ -126,5 +110,5 @@ if __name__ == '__main__':
 
         novos_thetas, gradientes = NeuralNetwork.neural_network(layers, lamb, thetas, instancias[0],instancias[1],dataset_file)
 
-        salva_resultados(dataset_file, novos_thetas)
+        FilesReader.save_results(dataset_file, novos_thetas)
 
