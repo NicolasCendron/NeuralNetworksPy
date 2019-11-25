@@ -73,13 +73,13 @@ def run(data,thetas, regularization, network,dataset_file):
                     #print("performance batch:" + str(p))
                     #performance = calculate_performance(network, evaluation, novos_thetas)
                     if (diff < min_diff):
-                        print("performance batch: " + str(p))
-                        performance = calculate_performance(network, evaluation, novos_thetas)
+                        #print("performance batch: " + str(p))
+                        #performance = calculate_performance(network, evaluation, novos_thetas)
                         break
                     initial_j_value = j_value
-                if(cont == 999):
-                    print("estouro batch: " + str(p))
-                    performance = calculate_performance(network, evaluation, novos_thetas)
+                #if(cont == 999):
+                    #print("estouro batch: " + str(p))
+                    #performance = calculate_performance(network, evaluation, novos_thetas)
 
 
         # generate cross validation training (K-1) and evaluation (1) partitions
